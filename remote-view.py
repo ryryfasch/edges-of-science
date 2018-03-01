@@ -4,9 +4,13 @@ import sys
 import time
 import json
 import random
+import urllib2
+import requests
 
 
-#data = json.load(open('cred.json'))
+credit = json.load(open('cred.json'))
+params = {'function': 'TIME_SERIES_INTRADAY', 'symbol': 'MSFT', 'interval': '1min', 'apikey': credit.api_key}
+print(credit)
 
 def getImages():
 
@@ -22,7 +26,17 @@ def makeImageSets(images):
 
     return upSet, downSet
 
-#def selectRandomImage(ticker, upSet, downSet):
+def selectRandomImage(ticker, upSet, downSet):
+
+    if(ticker > 1):
+        return random.choice(upSet)
+    else:
+        return random.choice(downSet)
+
 #API call to ticker here
 
-print(makeImageSets(getImages()))
+
+response = requests.get("https://www.alphavantage.co/query", params=params)
+#print(response.json())
+
+images = makeImageSets(getImages())
