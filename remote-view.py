@@ -4,13 +4,16 @@ import sys
 import time
 import json
 import random
-import urllib2
+
 import requests
 
 
-credit = json.load(open('cred.json'))
-params = {'function': 'TIME_SERIES_INTRADAY', 'symbol': 'MSFT', 'interval': '1min', 'apikey': credit.api_key}
-print(credit)
+credit = json.load(open('cred.json', "r"))
+
+
+#https://api.iextrading.com/1.0/stock/snap/book?filter=lastSalePrice
+#params = {'function': 'TIME_SERIES_INTRADAY', 'symbol': 'MSFT', 'interval': '1min', 'apikey': credit["api_key"]}
+#print(credit)
 
 def getImages():
 
@@ -34,9 +37,9 @@ def selectRandomImage(ticker, upSet, downSet):
         return random.choice(downSet)
 
 #API call to ticker here
-
-
-response = requests.get("https://www.alphavantage.co/query", params=params)
-#print(response.json())
+response = requests.get("https://api.iextrading.com/1.0/stock/snap/book?filter=lastSalePrice")
+response = response.json()
+mostRecentPrice = response["trades"][0]["price"]
+print(mostRecentPrice)
 
 images = makeImageSets(getImages())
