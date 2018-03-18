@@ -18,7 +18,6 @@ import requests
 cryptoList = requests.get("https://www.cryptocompare.com/api/data/coinlist/")
 cryptoList = cryptoList.json()
 cryptoList = [i for i in cryptoList["Data"]]
-print(cryptoList)
 
 
 
@@ -50,7 +49,7 @@ def selectRandomImage(upSet, downSet, price1, price2):
     else:
         return 'no change'
 
-'''
+
 #API call to ticker here
 mostRecentTradeID = None
 while 1:
@@ -73,4 +72,3 @@ if __name__ == "__main__":
     print newPrice
     randImage = selectRandomImage(images[0], images[1], mostRecentPrice, newPrice)
     print(randImage)
-'''
