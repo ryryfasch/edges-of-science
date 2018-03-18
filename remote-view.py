@@ -6,20 +6,18 @@ import json
 import random
 import sys
 import requests
-'''
-symbol = sys.argv[1]
-response1 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
-#response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
-response1 = response1.json()
-time.sleep(30)
-response2 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
-response2 = response2.json()
-#print(response)
-mostRecentPrice = response1["USD"]
-'''
+from PIL import Image
 
-def delay_response():
-    #newestPrice = response["trades"][0]["price"]
+
+
+
+
+symbol = sys.argv[1]
+def delay_response(symbol):
+    time.sleep(15)
+    response2 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
+    response2 = response2.json()
+    mostRecentPrice = response2["USD"]
     newestPrice = response2["USD"]
     return newestPrice
 
@@ -27,7 +25,7 @@ def delay_response():
 #cryptoList = requests.get("https://www.cryptocompare.com/api/data/coinlist/")
 #cryptoList = cryptoList.json()
 #cryptoList = [i for i in cryptoList["Data"]]
-cryptoList = ['TRX', 'XRP', 'ETH', 'BTC', 'LTC']
+#cryptoList = ['TRX', 'XRP', 'ETH', 'BTC', 'LTC']
 
 def getImages():
 
@@ -44,7 +42,7 @@ def makeImageSets(images):
     return upSet, downSet
 
 def selectRandomImage(upSet, downSet, price1, price2):
-    change = price1 - price2
+    change = price2 - price1
     if(change > 0):
         return random.choice(upSet)
     elif(change < 0):
@@ -54,8 +52,9 @@ def selectRandomImage(upSet, downSet, price1, price2):
 
 
 #API call to ticker here
+'''
 mostRecentTradeID = None
-'''while 1:
+while 1:
     response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
     response = response.json()
     mostRecentPrice = response["trades"][0]["price"]
@@ -63,15 +62,20 @@ mostRecentTradeID = None
     tradeID = response["trades"][0]["tradeId"]
     if mostRecentTradeID != tradeID:
         print("$" + str(mostRecentPrice))
-        mostRecentTradeID = tradeID'''
-
+        mostRecentTradeID = tradeID
+'''
 
 if __name__ == "__main__":
+
     images = makeImageSets(getImages())
-    symbol = random.sample(cryptoList, 1)
-    print("Up set\n", images[0], "\nDown set", images[1])
+    print("Downset\n", images[1], "Upset\n", images[0])
     response1 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
     response1 = response1.json()
-    print(response1)
-    firstPrice = response1["USD"]
-    print(symbol, firstPrice, type(firstPrice))
+    mostRecentPrice = response1["USD"]
+    print(mostRecentPrice)
+    newPrice = delay_response(symbol)
+    print(newPrice)
+    randImage = selectRandomImage(images[0], images[1], mostRecentPrice, newPrice)
+    image = Image.open("./images/{}".format(randImage))
+    image.show()
+    #print(randImage)
