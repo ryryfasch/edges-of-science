@@ -39,7 +39,7 @@ def showPIL(pilImage):
 
 symbol = sys.argv[1]
 def delay_response(symbol):
-    time.sleep(15)
+    time.sleep(5)
     response2 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
     response2 = response2.json()
     mostRecentPrice = response2["USD"]
@@ -59,8 +59,12 @@ def getImages():
 
 def makeImageSets(images):
     newImages = list(images)
+    print(newImages)
+    newImages = [i for i in newImages if i != ".DS_Store"]
+    print(newImages)
     random.shuffle(newImages)
     random.shuffle(newImages)
+    newImLen = (len(newImages))
     upSet = newImages[0:15]
     downSet = newImages[15:29]
 
