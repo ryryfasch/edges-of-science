@@ -7,7 +7,7 @@ import random
 import sys
 import requests
 
-print(sys.argv[1])
+
 credit = json.load(open('cred.json', "r"))
 
 
@@ -37,9 +37,15 @@ def selectRandomImage(ticker, upSet, downSet):
         return random.choice(downSet)
 
 #API call to ticker here
-response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
-response = response.json()
-mostRecentPrice = response["trades"][0]["price"]
-print(mostRecentPrice)
+mostRecentTradeID = None
+while 1:
+    response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
+    response = response.json()
+    mostRecentPrice = response["trades"][0]["price"]
+
+    tradeID = response["trades"][0]["tradeId"]
+    if mostRecentTradeID != tradeID:
+        print("$" + str(mostRecentPrice))
+        mostRecentTradeID = tradeID
 
 images = makeImageSets(getImages())
