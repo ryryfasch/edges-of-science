@@ -8,13 +8,25 @@ import sys
 import requests
 
 
-credit = json.load(open('cred.json', "r"))
+
+#credit = json.load(open('cred.json', "r"))
+#symbol = sys.argv[1]
+#response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
+#response = response.json()
+#mostRecentPrice = response["trades"][0]["price"]
+
+cryptoList = requests.get("https://www.cryptocompare.com/api/data/coinlist/")
+cryptoList = cryptoList.json()
+cryptoList = [i for i in cryptoList["Data"]]
+print(cryptoList)
 
 
-#https://api.iextrading.com/1.0/stock/snap/book?filter=lastSalePrice
-#params = {'function': 'TIME_SERIES_INTRADAY', 'symbol': 'MSFT', 'interval': '1min', 'apikey': credit["api_key"]}
-#print(credit)
-symbol = sys.argv[1]
+
+def delay_response():
+    time.sleep(10)#can change depending on time limit
+    newestPrice = response["trades"][0]["price"]
+    return newestPrice
+
 def getImages():
 
     return os.listdir("./images/")
@@ -29,13 +41,16 @@ def makeImageSets(images):
 
     return upSet, downSet
 
-def selectRandomImage(ticker, upSet, downSet):
-
-    if(ticker > 1):
+def selectRandomImage(upSet, downSet, price1, price2):
+    change = price1 - price2
+    if(change > 0):
         return random.choice(upSet)
-    else:
+    elif(change < 0):
         return random.choice(downSet)
+    else:
+        return 'no change'
 
+'''
 #API call to ticker here
 mostRecentTradeID = None
 while 1:
@@ -48,4 +63,14 @@ while 1:
         print("$" + str(mostRecentPrice))
         mostRecentTradeID = tradeID
 
-images = makeImageSets(getImages())
+
+if __name__ == "__main__":
+    images = makeImageSets(getImages())
+    print(mostRecentPrice)
+    print(images[0])
+    print(images[1])
+    newPrice = delay_response()
+    print newPrice
+    randImage = selectRandomImage(images[0], images[1], mostRecentPrice, newPrice)
+    print(randImage)
+'''
