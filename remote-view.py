@@ -6,15 +6,21 @@ import json
 import random
 import sys
 import requests
+from PIL import Image
 
 symbol = sys.argv[1]
-response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
+response = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
+#response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
 response = response.json()
-mostRecentPrice = response["trades"][0]["price"]
+print(response)
+mostRecentPrice = response["USD"]
 
 def delay_response():
-    time.sleep(10)#can change depending on time limit
-    newestPrice = response["trades"][0]["price"]
+    time.sleep(100)
+    #can change depending on time limit
+    #newestPrice = response["trades"][0]["price"]
+    response = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
+    newestPrice = response["USD"]
     return newestPrice
 
 def getImages():
