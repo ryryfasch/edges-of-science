@@ -6,7 +6,7 @@ import json
 import random
 import sys
 import requests
-
+'''
 symbol = sys.argv[1]
 response1 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
 #response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
@@ -16,6 +16,7 @@ response2 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&t
 response2 = response2.json()
 #print(response)
 mostRecentPrice = response1["USD"]
+'''
 
 def delay_response():
     #newestPrice = response["trades"][0]["price"]
@@ -23,10 +24,10 @@ def delay_response():
     return newestPrice
 
 
-cryptoList = requests.get("https://www.cryptocompare.com/api/data/coinlist/")
-cryptoList = cryptoList.json()
-cryptoList = [i for i in cryptoList["Data"]]
-
+#cryptoList = requests.get("https://www.cryptocompare.com/api/data/coinlist/")
+#cryptoList = cryptoList.json()
+#cryptoList = [i for i in cryptoList["Data"]]
+cryptoList = ['TRX', 'XRP', 'ETH', 'BTC', 'LTC']
 
 def getImages():
 
@@ -67,10 +68,10 @@ mostRecentTradeID = None
 
 if __name__ == "__main__":
     images = makeImageSets(getImages())
-    print(mostRecentPrice)
-    print(images[0])
-    print(images[1])
-    newPrice = delay_response()
-    print newPrice
-    randImage = selectRandomImage(images[0], images[1], mostRecentPrice, newPrice)
-    print(randImage)
+    symbol = random.sample(cryptoList, 1)
+    print("Up set\n", images[0], "\nDown set", images[1])
+    response1 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
+    response1 = response1.json()
+    print(response1)
+    firstPrice = response1["USD"]
+    print(symbol, firstPrice, type(firstPrice))
