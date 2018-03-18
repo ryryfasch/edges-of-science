@@ -6,12 +6,13 @@ import json
 import random
 import sys
 import requests
+from PIL import Image
 
 symbol = sys.argv[1]
 response1 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
 #response = requests.get("https://api.iextrading.com/1.0/stock/{}/book?filter=lastSalePrice".format(symbol))
 response1 = response1.json()
-time.sleep(30)
+time.sleep(10)
 response2 = requests.get("https://min-api.cryptocompare.com/data/price?fsym={}&tsyms=USD".format(symbol))
 response2 = response2.json()
 #print(response)
@@ -73,4 +74,6 @@ if __name__ == "__main__":
     newPrice = delay_response()
     print newPrice
     randImage = selectRandomImage(images[0], images[1], mostRecentPrice, newPrice)
-    print(randImage)
+    image = Image.open("./images/{}".format(randImage))
+    image.show()
+    #print(randImage)
